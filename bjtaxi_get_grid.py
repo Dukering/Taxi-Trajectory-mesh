@@ -66,8 +66,6 @@ def grid_point_single(node_xory_index,is_x,tripa,tripb,Graph):
         judge_x = [False] * len(node_xory_index)
         data = Graph.data_y[node_xory_index]
         orgin = Graph.origin[0]
-    #print([(tripa[2], tripa[1])] * len(node_xory_index), [(tripb[2], tripb[1])] *len(node_xory_index), judge_x,data)
-
     node_other =map(cal_x_y,[(tripa[1], tripa[2])] * len(node_xory_index), [(tripb[1], tripb[2])] *len(node_xory_index), judge_x,data)
 
     node_time = map(cal_time,[(tripa[0], tripa[1], tripa[2])] * len(node_xory_index), [(tripb[0], tripb[1], tripb[2])] * len(node_xory_index), judge_x,data)
@@ -147,12 +145,9 @@ def grid_point_informal(trip,
             indey = (Graph.origin[1] - Graph.data_y[-1]) / Graph.size_cell
         else:
             indey = int((Graph.origin[1] - next_node[2]) // Graph.size_cell)
-        #print(judgein(x_range,y_range,first_node))
         next_index = (index,indey)
-        #print((first_node[1],first_node[2]),(next_node[1],next_node[2]),first_index,next_index)
-        #print(x_range,y_range,first_node,next_node)
+
         if (judgein(x_range,y_range,first_node)|judgein(x_range,y_range,next_node)|(i==len(trip)-1))==0:
-            #print(judgein(x_range,y_range,first_node)|judgein(x_range,y_range,next_node)|(i==len(trip)-1))
             first_node = next_node
             first_index=next_index
             if len(grid_point)!=0:
@@ -161,13 +156,9 @@ def grid_point_informal(trip,
             continue
         node_x_index=np.array(range(max(next_index[0],first_index[0]),min(next_index[0],first_index[0]),-1))
         node_y_index=np.array(range(max(next_index[1],first_index[1]),min(next_index[1],first_index[1]),-1))
-        #print(node_x_index,node_y_index)
-        #print(node_x_index,node_y_index)
 
         if len(node_x_index)!=0:
           result=grid_point_single(node_x_index,True,trip[i-1],trip[i],Graph)
-          #print(result[0])
-          #break
           for j in result[0]:
             grid_point.append(j)
           if len(result[1])!=0:
@@ -180,7 +171,6 @@ def grid_point_informal(trip,
         first_index=next_index
     if len(grid_point) != 0:
       grid_point_all.append(sorted(grid_point, cmp_time))
-    #print(grid_point_all)
     return grid_point_all
 
 def ouput(trip_node,x_num,trip_index):
@@ -190,7 +180,11 @@ def ouput(trip_node,x_num,trip_index):
     first_node=trip_node[0]
     for i in range(1,len(trip_node)):
         next_node=trip_node[i]
-        x_index=np.max(np.append(first_node[1],next_node[1]))
+        #排除两个交点都在同一边的情况
+        if(((first_node[1]==next_node[1]).all())&((first_node[2]==first_node[2]).all())):
+                  first_node = next_node
+                  continue
+        x_index=np.min(np.append(first_node[1],next_node[1]))
         y_index=np.min(np.append(first_node[2],next_node[2]))
         #经过的方格编号
         index=y_index*x_num+x_index
