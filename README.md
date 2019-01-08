@@ -6,5 +6,5 @@ Taxi Trajectory mesh feature extraction
 提取的出租车轨迹网格特征包含了经过的网格编号、轨迹出入格子方向信息以及对应的时间。
 
 
-![image](https://github.com/Dukering/Taxi-Trajectory-mesh/blob/master/part_show.PNG)
+![image](https://github.com/Dukering/Taxi-Trajectory-mesh/blob/master/part_show.PNG)     
 红色的线表示原始轨迹，蓝色的线表示经过网格特征提取得出的轨迹线
